@@ -27,18 +27,18 @@
 							   checked="@item.IsCompleted" />
 					</div>
 					<div class="col">
-						@if (!item.IsCompleted)
+						@if (item.IsCompleted)
 						{
 							<input type="text"
-								   style:"vertical-align:middle"
-								   class="form-control border-0 text-decoration-line-through"
+								   style:"vertical-align:middle;text-decoration:line-through;"
+								   class="form-control border-0"
 								   @bind-value="item.Name"
 								   disabled />
 						}
 						else
 						{
 							<input type="text"
-								   style:"vertical-align:middle"
+								   style:"vertical-align:middle;"
 								   class="form-control border-0"
 								   @bind-value="item.Name" />
 						}
