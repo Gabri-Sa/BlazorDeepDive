@@ -20,7 +20,7 @@
 			}
 		}
 
-		public DateTime DateCompleted { get; set; }
+		public DateTime? DateCompleted { get; set; }
 	}
 }
 
