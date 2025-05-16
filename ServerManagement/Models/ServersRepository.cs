@@ -73,9 +73,26 @@
 				servers.Remove(server);
 			}
 		}
-		public static List<Server> SearchServers(string ServerFilter)
+		public static List<Server> SearchServers(string serverFilter)
 		{
-			return servers.Where(s => s.Name.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+			//return servers.Where(s => s.Name.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+
+
+			if (string.IsNullOrWhiteSpace(serverFilter))
+			{
+				return new List<Server>();
+			}
+
+			var result = new List<Server>();
+			for (int i = 0; i < servers.Count; i++)
+			{
+				if (servers[i].Name != null && servers[i].Name.Contains(serverFilter, StringComparison.OrdinalIgnoreCase))
+				{
+					result.Add(servers[i]);
+				}
+			}
+
+			return result;
 		}
 	}
 }
