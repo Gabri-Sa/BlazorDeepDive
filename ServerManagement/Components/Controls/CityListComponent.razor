@@ -15,8 +15,15 @@
 
 
 @code {
+
     [Parameter]
     public EventCallback<string> SelectCityCallback { get; set; }
+
+    public void ClearSelection()
+    {
+        this.selectedCity = string.Empty;
+    }
+
 
     private string selectedCity = "Toronto";
 
