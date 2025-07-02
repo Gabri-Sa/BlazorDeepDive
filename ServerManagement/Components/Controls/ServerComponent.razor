@@ -53,11 +53,17 @@
             </ServerManagement.Components.Pages.EditServer>
         }
     </li>
+    @SelectedCity
 }
 
 @code {
 
     private bool editingServer = false;
+
+    [CascadingParameter(Name ="SelectedCity")]
+    public string? SelectedCity { get; set; }
+
+
 
     [Parameter]
     public Server? Server { get; set; }
