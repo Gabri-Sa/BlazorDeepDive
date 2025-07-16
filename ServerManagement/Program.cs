@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
+builder.Services.AddCascadingValue("SelectedCity", sp => "Toronto");
 
 var app = builder.Build();
 
