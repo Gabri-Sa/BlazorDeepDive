@@ -1,10 +1,8 @@
-﻿
-<ul class="list-unstyled">
+﻿<ul class="list-unstyled">
     <RepeaterComponent Items="this.servers">
         <Row Context="server">
-        <ServerComponent Server="server></ServerComponent>
+        <ServerComponent Server="server"> </ServerComponent>
     </Row>
-
     </RepeaterComponent>
  </ul>
 
@@ -21,11 +19,11 @@
     {
         if (string.IsNullOrWhiteSpace(this.SearchFilter))
         {
-            servers = ServersRepository.GetServersByCity(CityName ?? "Toronto");
+           servers = ServersRepository.GetServersByCity(CityName ?? "Toronto");
         }
         else
         {
             servers = ServersRepository.SearchServers(this.SearchFilter);
         }
-    }
+   }
 }
