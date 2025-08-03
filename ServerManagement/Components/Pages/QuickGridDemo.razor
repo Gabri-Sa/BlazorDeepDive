@@ -1,0 +1,14 @@
+﻿@page "/quickgrid"
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+<h3>QuickGrid Demo</h3>
+<br />
+@if (servers != null)
+{
+<QuickGrid Items="servers.AsQueryable()"></QuickGrid>
+}
+
+@code {
+    private List<Server>? servers = ServersRepository.GetServers();
+
+}
