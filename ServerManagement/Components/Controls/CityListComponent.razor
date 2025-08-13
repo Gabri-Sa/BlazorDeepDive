@@ -23,13 +23,10 @@
 
     private List<String>? cities;
 
-
-
-
     protected override bool ShouldRender()
     {
         var guid = Guid.NewGuid();
-        Console.WriteLine($"CityListComponent: {nameof(ShouldRender)} : {guid}");
+        Console.WriteLine($"{this.GetType().Name}: {nameof(ShouldRender)} : {guid}");
 
         return base.ShouldRender();
     }
@@ -37,7 +34,7 @@
     public override Task SetParametersAsync(ParameterView parameters)
     {
         var guid = Guid.NewGuid();
-        Console.WriteLine($"CityListComponent: {nameof(SetParametersAsync)}:{guid}");
+        Console.WriteLine($"{this.GetType().Name}: {nameof(SetParametersAsync)}:{guid}");
 
         return base.SetParametersAsync(parameters);
     }
@@ -47,7 +44,7 @@
         base.OnInitialized();
 
         var guid = Guid.NewGuid();
-        Console.WriteLine($"CityListComponent: {nameof(OnInitialized)} : {guid}");
+        Console.WriteLine($"{this.GetType().Name}: {nameof(OnInitialized)} : {guid}");
 
         cities ??= CitiesRepository.GetCities();
     }
@@ -57,7 +54,7 @@
         base.OnParametersSet();
 
         var guid = Guid.NewGuid();
-        Console.WriteLine($"CityListComponent: {nameof(OnParametersSet)} : {guid}");
+        Console.WriteLine($"{this.GetType().Name}: {nameof(OnParametersSet)} : {guid}");
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -65,7 +62,7 @@
         base.OnAfterRender(firstRender);
 
         var guid = Guid.NewGuid();
-        Console.WriteLine($"CityListComponent: {nameof(OnAfterRender)}: {guid}");
+        Console.WriteLine($"{this.GetType().Name}: {nameof(OnAfterRender)}: {guid}");
     }
 
     public void ClearSelection()
@@ -83,6 +80,6 @@
     public void Dispose()
     {
         var guid = Guid.NewGuid();
-        Console.WriteLine($"CityListComponent: {nameof(Dispose)} : {guid}");
+        Console.WriteLine($"{this.GetType().Name}: {nameof(Dispose)} : {guid}");
     }
 }
