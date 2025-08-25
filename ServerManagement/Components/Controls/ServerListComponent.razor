@@ -1,6 +1,4 @@
-﻿
-
-<table class="table table-striped">
+﻿<table class="table table-striped">
     <RepeaterComponent Items="servers">
         <Header>
         <thead>
@@ -37,45 +35,45 @@
     [Parameter]
     public string SearchFilter { get; set; } = "";
 
+    [Parameter]
+    public int AnotherParam { get; set; }
+
     private List<Server>? servers;
-
-    protected override void OnParametersSet()
-    {
-        if (string.IsNullOrWhiteSpace(this.SearchFilter))
-        {
-            servers = ServersRepository.GetServersByCity(CityName ?? "Toronto");
-        }
-        else
-        {
-            servers = ServersRepository.SearchServers(this.SearchFilter);
-        }
-
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(OnParametersSet)} called. Guid: {guid}");
-    }
-
-    protected override bool ShouldRender()
-    {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(ShouldRender)} called. Guid: {guid}");
-
-        return base.ShouldRender();
-    }
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(SetParametersAsync)}:{guid}");
+        if (parameters.TryGetValue<string>("CityName", out var cityName))
+        {
+            {
+                if (cityName != CityName)
+                {
+                    base.SetParametersAsync(parameters);
+                }
+            }
 
-        return base.SetParametersAsync(parameters);
+            if (parameters.TryGetValue<string>("SearchFilter", out var searchFilter))
+            {
+                if (searchFilter != SearchFilter)
+                {
+                    base.SetParametersAsync(parameters);
+                }
+            }
+            return Task.CompletedTask;
+        }
     }
-
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
-        base.OnInitialized();
-
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(OnInitialized)} : {guid}");
+        if (isFirstRender == false)
+        {
+            if (string.IsNullOrWhiteSpace(this.SearchFilter))
+            {
+                servers = ServersRepository.GetServersByCity(CityName ?? "Toronto");
+            }
+            else
+            {
+                servers = ServersRepository.SearchServers(this.SearchFilter);
+            }
+        }
     }
 
     protected override void OnAfterRender(bool firstRender)
