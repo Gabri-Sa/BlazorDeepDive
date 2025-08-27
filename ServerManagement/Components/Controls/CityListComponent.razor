@@ -23,12 +23,19 @@
 
     private List<String>? cities;
 
+    private void HandleCitySelection(string cityName)
+    {
+        selectedCity = cityName;
+
+        SelectCityCallback.InvokeAsync(cityName);
+    }
+
     protected override bool ShouldRender()
     {
         var guid = Guid.NewGuid();
         Console.WriteLine($"{this.GetType().Name}: {nameof(ShouldRender)} : {guid}");
 
-        return base.ShouldRender();
+        return false;
     }
 
     public override Task SetParametersAsync(ParameterView parameters)
@@ -68,13 +75,6 @@
     public void ClearSelection()
     {
         this.selectedCity = string.Empty;
-    }
-
-    private void HandleCitySelection(string cityName)
-    {
-        selectedCity = cityName;
-
-        SelectCityCallback.InvokeAsync(cityName);
     }
 
     public void Dispose()
