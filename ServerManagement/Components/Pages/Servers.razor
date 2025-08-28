@@ -57,13 +57,14 @@
     private void HandleCitySelection(string cityName)
     {
         selectedCity = cityName;
+
         this.searchFilter = string.Empty;
         searchBarComponent?.ClearFilter();
     }
 
     private void HandleSearchServer(string searchFilter)
     {
-        this.searchFilter = searchFilter;
+       // this.searchFilter = searchFilter;
         cityListComponent?.ClearSelection();
     }
 }
