@@ -1,4 +1,6 @@
-﻿<table class="table table-striped">
+﻿@inherits BaseComponent
+
+<table class="table table-striped">
     <RepeaterComponent Items="servers">
         <Header>
         <thead>
@@ -23,25 +25,23 @@
         <Row Context="server">
             <ServerComponent Server="server"></ServerComponent>
         </Row>
-
     </RepeaterComponent>
 </table>
 
 
 @code {
-        [Parameter]
-        public string? CityName { get; set; }
+    [Parameter]
+    public string? CityName { get; set; }
 
-        [Parameter]
-        public string SearchFilter { get; set; } = "";
+    [Parameter]
+    public string SearchFilter { get; set; } = "";
 
     private List<Server>? servers;
 
+    private System.Threading.Timer? Timer;
+
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(SetParametersAsync)}:{guid}");
-
         if (parameters.TryGetValue<string>("CityName", out var cityName))
         {
             if (cityName != CityName)
@@ -59,11 +59,9 @@
         }
         return Task.CompletedTask;
     }
+
     protected override void OnParametersSet()
     {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(OnParametersSet)} : {guid}");
-
         if (isFirstRender == false)
         {
             if (string.IsNullOrWhiteSpace(this.SearchFilter))
@@ -79,9 +77,6 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(OnAfterRender)}: {guid}");
-
         base.OnAfterRender(firstRender);
 
         if (firstRender)
@@ -96,21 +91,11 @@
                 servers = ServersRepository.SearchServers(this.SearchFilter);
             }
             StateHasChanged();
+
+            Timer = new System.Threading.Timer(_ =>
+            {
+                base.InvokeAsync(StateHasChanged);
+            }, null, 2000, 2000);
         }
-    }
-    protected override bool ShouldRender()
-    {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(ShouldRender)} : {guid}");
-
-        return base.ShouldRender();
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(OnInitialized)} : {guid}");
     }
 }

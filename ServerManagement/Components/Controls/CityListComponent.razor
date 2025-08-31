@@ -8,7 +8,8 @@
             {
                 <CityComponent city="@city"
                                selectedCity="@selectedCity"
-                               SelectCityCallback="HandleCitySelection"></CityComponent>
+                               SelectCityCallback="HandleCitySelection">
+                </CityComponent>
             }
         </div>
     </div>
@@ -35,7 +36,7 @@
         var guid = Guid.NewGuid();
         Console.WriteLine($"{this.GetType().Name}: {nameof(ShouldRender)} : {guid}");
 
-        return false;
+        return base.ShouldRender();
     }
 
     public override Task SetParametersAsync(ParameterView parameters)

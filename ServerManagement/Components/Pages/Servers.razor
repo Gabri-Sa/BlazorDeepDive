@@ -21,23 +21,14 @@
 <br />
 
 <CascadingValue Name="SelectedCity" Value="@selectedCity">
-
     <ServerListComponent 
         @rendermode="InteractiveServer"
-                         CityName="@this.selectedCity"
-                         SearchFilter="@searchFilter"
-                         AnotherParam="anotherParam"></ServerListComponent>
+        CityName="@this.selectedCity"
+        SearchFilter="@searchFilter">
+    </ServerListComponent>
 </CascadingValue>
 <p>
     <a href="/servers/add" class="btn btn-primary">Add Server</a>
-</p>
-
-<p>
-    <button class="btn btn-primary" @onclick="@(() =>
-          {
-            Random random = new Random();
-            anotherParam = random.Next(0, 100);
-            })">Change Param</button>
 </p>
 
 @code {
