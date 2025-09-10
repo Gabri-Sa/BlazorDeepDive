@@ -20,7 +20,13 @@
     [Parameter]
     public EventCallback<string> SelectCityCallback { get; set; }
 
-    private string selectedCity = "Toronto";
+    public void ClearSelection()
+    {
+        this.selectedCity = string.Empty;
+    }
+
+    [Parameter]
+    public string selectedCity { get; set; } = "Toronto";
 
     private List<String>? cities;
 
@@ -71,11 +77,6 @@
 
         var guid = Guid.NewGuid();
         Console.WriteLine($"{this.GetType().Name}: {nameof(OnAfterRender)}: {guid}");
-    }
-
-    public void ClearSelection()
-    {
-        this.selectedCity = string.Empty;
     }
 
     public void Dispose()
