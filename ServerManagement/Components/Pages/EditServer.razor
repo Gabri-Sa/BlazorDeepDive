@@ -1,5 +1,8 @@
 ﻿@page "/servers/{id:int}"
+
 @inject NavigationManager NavigationManager
+
+@inject IJSRuntime JSRuntime
 
 <h3>Edit Server</h3>
 <br />
@@ -9,16 +12,16 @@
 {
     <EditForm Model="server" FormName="formServer" OnValidSubmit="Submit">
         <DataAnnotationsValidator></DataAnnotationsValidator>
-
         <ValidationSummary></ValidationSummary>
 
         <InputNumber @bind-Value="server.ServerId" hidden></InputNumber>
+
         <FieldComponent Label="Name">
-            <Control> 
-            <InputText @bind-Value="server.Name" class="form-control"></InputText> 
+            <Control>
+                <InputText @bind-Value="server.Name" class="form-control"></InputText>
             </Control>
-            <ValidationControl> 
-                <ValidationMessage For="() => server.Name"></ValidationMessage> 
+            <ValidationControl>
+                <ValidationMessage For="() => server.Name"></ValidationMessage>
             </ValidationControl>
         </FieldComponent>
 
@@ -64,5 +67,13 @@
             ServersRepository.UpdateServer(server.ServerId, server);
         }
         NavigationManager.NavigateTo("/servers");
+    }
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+        var isConfirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to leave this page?");
+        if (!isConfirmed)
+        {
+            context.PreventNavigation();
+        }
     }
 }
