@@ -1,5 +1,4 @@
 ﻿@page "/servers"
-@using ServerManagement.Models
 
 @rendermode InteractiveServer
 
@@ -15,8 +14,7 @@
 
 <SearchBarComponent @ref="searchBarComponent"
                     SearchServerCallback="HandleSearchServer"
-                    style="width:200px"
-                    data-my-attribute="my data"></SearchBarComponent>
+                    style="width:500px"></SearchBarComponent>
 
 <br />
 
@@ -24,8 +22,7 @@
     <ServerListComponent 
         @rendermode="InteractiveServer"
         CityName="@this.selectedCity"
-        SearchFilter="@searchFilter">
-    </ServerListComponent>
+        SearchFilter="@searchFilter"></ServerListComponent>
 </CascadingValue>
 <p>
     <a href="/servers/add" class="btn btn-primary">Add Server</a>
