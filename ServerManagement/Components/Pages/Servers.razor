@@ -22,12 +22,14 @@
 <br />
 
 <CascadingValue Name="SelectedCity" Value="@selectedCity">
+
     <ServerListComponent @rendermode="InteractiveServer"
                          CityName="@this.selectedCity"
                          SearchFilter="@searchFilter"></ServerListComponent>
 </CascadingValue>
+
 <p>
-    <a href="/servers/add" class="btn btn-primary">Add Server</a>
+    <a href="/server" class="btn btn-primary">Add Server</a>
 </p>
 
 @code {
