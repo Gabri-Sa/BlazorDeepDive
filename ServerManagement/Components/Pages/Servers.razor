@@ -22,8 +22,7 @@
 <br />
 
 <CascadingValue Name="SelectedCity" Value="@selectedCity">
-
-    <ServerListComponent @rendermode="InteractiveServer"
+        <ServerListComponent @rendermode="InteractiveServer"
                          CityName="@this.selectedCity"
                          SearchFilter="@searchFilter"></ServerListComponent>
 </CascadingValue>
@@ -58,7 +57,7 @@
 
     private void HandleSearchServer(string searchFilter)
     {
-        // this.searchFilter = searchFilter;
+        this.searchFilter = searchFilter;
         cityListComponent?.ClearSelection();
     }
 

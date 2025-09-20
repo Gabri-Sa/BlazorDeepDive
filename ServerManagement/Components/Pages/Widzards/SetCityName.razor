@@ -1,9 +1,13 @@
 ﻿@page "/cityname"
+@*@using Microsoft.AspNetCore.Authorization*@
+@*@using ServerManagement.StateStore*@
+
 @rendermode InteractiveServer
 
 @inherits ComponentBase
 
 @inject NavigationManager NavigationManager
+
 @*@inject SessionStorage sessionStorage*@
 
 <h3>City Name</h3>
@@ -31,7 +35,7 @@
     private string? cityName;
 
     [SupplyParameterFromQuery]
-    public string? serverName { get; set; }
+    public string? ServerName { get; set; }
 
     protected override void OnInitialized()
     {
@@ -42,7 +46,7 @@
     {
         if (firstRender)
         {
-            if (string.IsNullOrWhiteSpace(serverName))
+            if (string.IsNullOrWhiteSpace(ServerName))
             {
                 this.errorMessage = "Server Name wasn't provided.";
                 StateHasChanged();
@@ -51,17 +55,17 @@
     }
     private void GoNext()
     {
-        if (string.IsNullOrWhiteSpace(serverName))
+        if (string.IsNullOrWhiteSpace(ServerName))
         {
-            this.errorMessage = "Server Name wasn't provided.";
+            this.errorMessage = "Server name wasn't provided.";
         }
         else if (string.IsNullOrWhiteSpace(cityName))
         {
-            this.errorMessage = "City Name is required.";
+            this.errorMessage = "City name is required.";
         }
         else
         {
-            NavigationManager.NavigateTo($"/serverstatus?servername={serverName}&cityname={cityName}");
+            NavigationManager.NavigateTo($"/serverstatus?servername={ServerName}&cityname={cityName}");
         }
     }
 }

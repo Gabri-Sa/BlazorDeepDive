@@ -1,9 +1,16 @@
 ﻿@page "/serverstatus"
-@using Microsoft.AspNetCore.Authorization
+@*@using Microsoft.AspNetCore.Authorization*@
+@*@using ServerManagement.StateStore*@
+
+@rendermode InteractiveServer
+
+@*@attribute [Authorize]*@
+
 @inherits ComponentBase
 
 @inject NavigationManager NavigationManager
-@*@inject SessionStorage sessionStorage*@
+@*@inject ContainerStorage containerStorage*@
+@*@inject IServersEFCoreRepository ServersEFCoreRepository*@
 
 <h3>Server Status</h3>
 <br />
@@ -17,11 +24,12 @@
 
 <FieldComponent Label="Server Status">
     <Control>
-        <input type="checkbox" @bind-value="isOnline" class="form-check-imput"> </input>
+        <input type="checkbox"
+               @bind-value="isOnline"
+               class="form-check-input"> </input>
     </Control>
 </FieldComponent>
 <br />
-
 <button type="button" class="btn btn-primary" @onclick="Save">Save</button>
 
 @code {
@@ -41,26 +49,27 @@
         {
             if (string.IsNullOrWhiteSpace(ServerName))
             {
-                this.errorMessage = "Server Name wasn't provided.";
+                this.errorMessage = "Server name wasn't provided.";
                 StateHasChanged();
             }
             else if (string.IsNullOrWhiteSpace(CityName))
             {
-                this.errorMessage = "City Name wasn't provided.";
+                this.errorMessage = "City name wasn't provided.";
                 StateHasChanged();
             }
         }
     }
+
     private void Save()
     {
         if (string.IsNullOrWhiteSpace(ServerName))
         {
-            this.errorMessage = "Server Name wasn't provided.";
+            this.errorMessage = "Server name wasn't provided.";
             return;
         }
         else if (string.IsNullOrWhiteSpace(CityName))
         {
-            this.errorMessage = "City Name wasn't provided.";
+            this.errorMessage = "City name wasn't provided.";
             return;
         }
 
