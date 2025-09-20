@@ -1,4 +1,5 @@
 using ServerManagement.Components;
+using ServerManagement.StateStore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
-builder.Services.AddCascadingValue("SelectedCity", sp => "Toronto");
+builder.Services.AddTransient<SessionStorage>();
 
 var app = builder.Build();
 

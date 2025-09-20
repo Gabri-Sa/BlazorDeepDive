@@ -1,6 +1,6 @@
 ﻿@page "/cityname"
 @*@using Microsoft.AspNetCore.Authorization*@
-@*@using ServerManagement.StateStore*@
+@using ServerManagement.StateStore
 
 @rendermode InteractiveServer
 
@@ -8,7 +8,7 @@
 
 @inject NavigationManager NavigationManager
 
-@*@inject SessionStorage sessionStorage*@
+@inject SessionStorage sessionStorage
 
 <h3>City Name</h3>
 <br />
@@ -20,52 +20,49 @@
     </div>
 }
 
-<FieldComponent Label="City Name">
-    <Control>
-        <input type="text" @bind-value="cityName" class="form-control"> </input>
-    </Control>
-</FieldComponent>
-<br />
-
-<button type="button" class="btn btn-primary" @onclick="GoNext">Next</button>
+@if (server is not null)
+{
+    <FieldComponent Label="City Name">
+        <Control>
+            <input type="text" @bind-value="server.City" class="form-control"> </input>
+        </Control>
+    </FieldComponent>
+    <br />
+    <button type="button" class="btn btn-primary" @onclick="GoNext">Next</button>
+}
 
 @code {
+    private Server? server;
+
     private string? errorMessage;
-
-    private string? cityName;
-
-    [SupplyParameterFromQuery]
-    public string? ServerName { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            if (string.IsNullOrWhiteSpace(ServerName))
-            {
-                this.errorMessage = "Server Name wasn't provided.";
-                StateHasChanged();
-            }
+            this.server = await this.sessionStorage.GetServerAsync();
+            StateHasChanged();
         }
     }
-    private void GoNext()
+
+    private async Task GoNext()
     {
-        if (string.IsNullOrWhiteSpace(ServerName))
+        if (server is not null)
         {
-            this.errorMessage = "Server name wasn't provided.";
-        }
-        else if (string.IsNullOrWhiteSpace(cityName))
-        {
-            this.errorMessage = "City name is required.";
-        }
-        else
-        {
-            NavigationManager.NavigateTo($"/serverstatus?servername={ServerName}&cityname={cityName}");
+            if (string.IsNullOrWhiteSpace(server.City))
+            {
+                this.errorMessage = "City name is required.";
+            }
+            else
+            {
+                await sessionStorage.SetServerAsync(server);
+                NavigationManager.NavigateTo("/serverstatus");
+            }
         }
     }
 }
