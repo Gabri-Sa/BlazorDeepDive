@@ -6,11 +6,10 @@
 @inherits ComponentBase
 
 @inject NavigationManager NavigationManager
-@inject SessionStorage sessionStorage
+@inject ContainerStorage containerStorage
 
 <h3>Server Status</h3>
 <br />
-
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="alert alert-danger">
@@ -46,20 +45,20 @@
 
     private string? errorMessage;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
-            this.server = await this.sessionStorage.GetServerAsync();
+            this.server = this.containerStorage.GetServer();
             StateHasChanged();
         }
     }
 
-    private async Task Save()
+    private void Save()
     {
         if (server is not null)
         {
-            await sessionStorage.SetServerAsync(null);
+            containerStorage.SetServer(null);
             ServersRepository.AddServer(server);
             NavigationManager.NavigateTo($"/servers/back_from/{this.server?.City}");
         }

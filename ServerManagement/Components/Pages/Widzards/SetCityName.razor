@@ -1,5 +1,4 @@
 ﻿@page "/cityname"
-@*@using Microsoft.AspNetCore.Authorization*@
 @using ServerManagement.StateStore
 
 @rendermode InteractiveServer
@@ -7,12 +6,10 @@
 @inherits ComponentBase
 
 @inject NavigationManager NavigationManager
-
-@inject SessionStorage sessionStorage
+@inject ContainerStorage containerStorage
 
 <h3>City Name</h3>
 <br />
-
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="alert alert-danger">
@@ -41,16 +38,16 @@
         base.OnInitialized();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
-            this.server = await this.sessionStorage.GetServerAsync();
+            this.server = this.containerStorage.GetServer();
             StateHasChanged();
         }
     }
 
-    private async Task GoNext()
+    private void GoNext()
     {
         if (server is not null)
         {
@@ -60,7 +57,7 @@
             }
             else
             {
-                await sessionStorage.SetServerAsync(server);
+                containerStorage.SetServer(server);
                 NavigationManager.NavigateTo("/serverstatus");
             }
         }
