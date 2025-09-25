@@ -1,4 +1,6 @@
-﻿@inject NavigationManager NavigationManager
+﻿@using ServerManagement.StateStore
+@inject NavigationManager NavigationManager
+@inject TorontoOnlineServersStore TorontoOnlineServersStore
 
 @if (Server != null)
 {
@@ -29,7 +31,7 @@
             {
                 <button type="button"
                         class="btn btn-outline-danger"
-                        @onclick="@(() => { Server.IsOnline = false; })">
+                        @onclick="@(() => { SetServerStatus(false); })">
                     Turn Off
                 </button>
             }
@@ -37,7 +39,7 @@
             {
                 <button type="button"
                         class="btn btn-outline-success"
-                        @onclick="@(() => { Server.IsOnline = true; })">
+                        @onclick="@(() => { SetServerStatus(true); })">
                     Turn On
                 </button>
             }
@@ -58,18 +60,13 @@ else
     <tr>
         <td colspan="4">No server data available.</td>
     </tr>
-
-
 }
 
 @code {
-
     private bool editingServer = false;
 
     [CascadingParameter(Name = "SelectedCity")]
     public string? SelectedCity { get; set; }
-
-
 
     [Parameter]
     public Server? Server { get; set; }
@@ -101,12 +98,31 @@ else
                 case "Halifax": return "white";
                 default: return "white";
             }
-
         }
         else
         {
             return "white";
         }
+    }
+    private void SetServerStatus(bool status)
+    {
+        if (this.Server is not null)
+        {
+            if (this.Server.IsOnline != status)
+            {
+                if (this.Server.City.Equals("Toronto", StringComparison.OrdinalIgnoreCase))
+                {
+                    var num= TorontoOnlineServersStore.GetNumberServersOnline();
+                    if (status)
+                        TorontoOnlineServersStore.SetNumbersServersOnline(num + 1);
+                    else if (num >1)
+                        TorontoOnlineServersStore.SetNumbersServersOnline(num - 1 );
+                }
+                this.Server.IsOnline = status;
+            }
+
+        }
+
     }
 }
 

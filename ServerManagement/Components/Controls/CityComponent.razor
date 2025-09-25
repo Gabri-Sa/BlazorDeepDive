@@ -1,4 +1,5 @@
-﻿@implements IDisposable
+﻿@using ServerManagement.StateStore
+@inject TorontoOnlineServersStore TorontoOnlineServersStore
 
 <div class="col">
     <div class="card @(selectedCity.Equals(city, StringComparison.OrdinalIgnoreCase) ? "border-primary" : "")">
@@ -11,10 +12,19 @@
                 @city
             </button>
         </div>
+
+        <div>
+            @if (city.Equals("Toronto", StringComparison.OrdinalIgnoreCase))
+            {
+                <text>@numberServersOnlineToronto</text>
+            }
+        </div>
     </div>
 </div>
 
 @code {
+    private int numberServersOnlineToronto;
+
     [Parameter]
     public string selectedCity { get; set; } = "Toronto";
 
@@ -26,61 +36,23 @@
 
     private void SelectCity(string cityName)
     {
-      SelectCityCallback.InvokeAsync(cityName);
-    }
-
-    protected override bool ShouldRender()
-    {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(ShouldRender)} : {guid}");
-
-        return base.ShouldRender();
-    }
-
-    public override Task SetParametersAsync(ParameterView parameters)
-    {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(SetParametersAsync)}:{guid}");
-
-        return base.SetParametersAsync(parameters);
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(OnInitialized)} : {guid}");
-    }
-
-    protected override void OnParametersSet()
-    {
-        base.OnParametersSet();
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(OnParametersSet)} : {guid}");
+        SelectCityCallback.InvokeAsync(cityName);
     }
 
     protected override void OnAfterRender(bool firstRender)
     {
-        base.OnAfterRender(firstRender);
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(OnAfterRender)}: {guid}");
+        if (firstRender)
+        {
+            numberServersOnlineToronto = TorontoOnlineServersStore.GetNumberServersOnline();
+            TorontoOnlineServersStore.AddStateChangeListeners(OnServersStatusChange);
+            StateHasChanged();
+        }
     }
 
-    public void ClearSelection()
+    private void OnServersStatusChange()
     {
-        this.selectedCity = string.Empty;
+        numberServersOnlineToronto = TorontoOnlineServersStore.GetNumberServersOnline();
+        StateHasChanged();
     }
 
-    private void HandleCitySelection(string cityName)
-    {
-        selectedCity = cityName;
-
-        SelectCityCallback.InvokeAsync(cityName);
-    }
-
-    public void Dispose()
-    {
-        var guid = Guid.NewGuid();
-        Console.WriteLine($"{this.GetType().Name}: {nameof(Dispose)} : {guid}");
-    }
 }
