@@ -10,6 +10,10 @@ builder.Services.AddRazorComponents()
 builder.Services.AddTransient<SessionStorage>();
 builder.Services.AddScoped<ContainerStorage>();
 builder.Services.AddScoped<TorontoOnlineServersStore>();
+builder.Services.AddScoped<MontrealOnlineServersStore>();
+builder.Services.AddScoped<OttawaOnlineServersStore>();
+builder.Services.AddScoped<CalgaryOnlineServersStore>();
+builder.Services.AddScoped<HalifaxOnlineServersStore>();
 
 var app = builder.Build();
 
@@ -28,6 +32,5 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
 	.AddInteractiveServerRenderMode();
-
 
 app.Run();
