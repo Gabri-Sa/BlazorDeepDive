@@ -1,13 +1,16 @@
 ﻿@page "/browser_wasm_2"
 
+@using WebAssemblyDemo.Client
+
 @rendermode InteractiveWebAssembly
 
 @inject IJSRuntime JSRuntime
+@inject ContainerStorage ContainerStorage
 
 <h3>Browser Storage Step 2</h3>
 <br />
 <br />
-<b>Demo Data: </b>@data 
+<b>Demo Data: </b>@data
 
 @code {
     private string data = "";
@@ -21,8 +24,8 @@
     {
         if (firstRender)
         {
-            // JS interop is safe here
-            data = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "demo-data");
+            // data = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "demo-data");
+            data = ContainerStorage.GetMessage();
             StateHasChanged();
         }
     }

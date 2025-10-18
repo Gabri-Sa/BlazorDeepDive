@@ -1,9 +1,12 @@
 ﻿@page "/browser_wasm_1"
 
+@using WebAssemblyDemo.Client
+
 @rendermode InteractiveWebAssembly
 
 @inject IJSRuntime JSRuntime
-@inject NavigationManager Navigation
+@inject NavigationManager NavigationManager
+@inject ContainerStorage ContainerStorage
 
 <h3>Browser Storage Step 1</h3>
 <br/>
@@ -19,7 +22,8 @@
 
     private async Task GoNext()
     {
-        await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "demo-data", data);
-        Navigation.NavigateTo("/browser_wasm_2");
+        //await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "demo-data", data);
+        ContainerStorage.SetMessage(data);
+        NavigationManager.NavigateTo("/browser_wasm_2");
     }
 }
