@@ -4,6 +4,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationMananger
+@inject IServersEFCoreRepository ServersEFCoreRepository
 
 <h3>QuickGrid Demo</h3>
 <br />
@@ -74,16 +75,23 @@
 }
 
 @code {
-    private List<Server>? servers = ServersRepository.GetServers();
+    private List<Server>? servers;
 
     private PaginationState paginationState = new PaginationState { ItemsPerPage = 5 };
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            servers = ServersEFCoreRepository.GetServers();
+        }
+    }
 
     private void DeleteServer (int serverId)
     {
         if(serverId > 0)
         {
-            ServersRepository.DeleteServer(serverId);
+            ServersEFCoreRepository.DeleteServer(serverId);
             NavigationMananger.NavigateTo("/quickgrid", true);
         }
     }

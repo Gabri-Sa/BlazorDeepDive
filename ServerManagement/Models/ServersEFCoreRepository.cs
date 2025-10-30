@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using ServerManagement.Data;
 
 
 namespace ServerManagement.Models
 {
-    public class ServersEFCoreRepository
+    public class ServersEFCoreRepository : IServersEFCoreRepository
     {
         private readonly IDbContextFactory<ServerManagementContext> contextFactory;
 
@@ -51,11 +50,11 @@ namespace ServerManagement.Models
             var serverToUpdate = db.Servers.Find(serverId);
             if (serverToUpdate is not null)
 
-                serverToUpdate.IsOnline = server.IsOnline;
-                serverToUpdate.Name = server.Name;
-                serverToUpdate.City = server.City;
+            serverToUpdate.IsOnline = server.IsOnline;
+            serverToUpdate.Name = server.Name;
+            serverToUpdate.City = server.City;
 
-                db.SaveChanges();
+            db.SaveChanges();
         }
 
         public void DeleteServer(int serverId)
@@ -74,8 +73,6 @@ namespace ServerManagement.Models
             return db.Servers.Where(x =>
                 x.Name != null &&
                 x.Name.ToLower().IndexOf(serverFilter.ToLower()) >= 0).ToList();
-
         }
-
     }
 }

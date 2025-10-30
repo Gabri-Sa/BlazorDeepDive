@@ -6,6 +6,11 @@
 
 @inject NavigationManager NavigationManager
 @inject TorontoOnlineServersStore TorontoOnlineServersStore
+@inject MontrealOnlineServersStore MontrealOnlineServersStore
+@inject OttawaOnlineServersStore OttawaOnlineServersStore
+@inject CalgaryOnlineServersStore CalgaryOnlineServersStore
+@inject HalifaxOnlineServersStore HalifaxOnlineServersStore
+@inject IServersEFCoreRepository ServersEFCoreRepository
 
 <h3>Servers</h3>
 <br />
@@ -45,7 +50,7 @@
 
     private void HandleSearch()
     {
-        //this.servers = ServersRepository.SearchServers(serverFilter);
+        //this.servers = ServersEFCoreRepository.SearchServers(serverFilter);
         //this.selectedCity = string.Empty;
     }
 
@@ -74,11 +79,36 @@
 
                 StateHasChanged();
             }
-            var serversToronto = ServersRepository.GetServersByCity("Toronto");
+            
+            // Initialize online server counts for all cities
+            var serversToronto = ServersEFCoreRepository.GetServersByCity("Toronto");
             if (serversToronto is not null)
-                {
-                    TorontoOnlineServersStore.SetNumbersServersOnline(serversToronto.Count(x => x.IsOnline));
-                         
+            {
+                TorontoOnlineServersStore.SetNumbersServersOnline(serversToronto.Count(x => x.IsOnline));
+            }
+
+            var serversMontreal = ServersEFCoreRepository.GetServersByCity("Montreal");
+            if (serversMontreal is not null)
+            {
+                MontrealOnlineServersStore.SetNumbersServersOnline(serversMontreal.Count(x => x.IsOnline));
+            }
+
+            var serversOttawa = ServersEFCoreRepository.GetServersByCity("Ottawa");
+            if (serversOttawa is not null)
+            {
+                OttawaOnlineServersStore.SetNumbersServersOnline(serversOttawa.Count(x => x.IsOnline));
+            }
+
+            var serversCalgary = ServersEFCoreRepository.GetServersByCity("Calgary");
+            if (serversCalgary is not null)
+            {
+                CalgaryOnlineServersStore.SetNumbersServersOnline(serversCalgary.Count(x => x.IsOnline));
+            }
+
+            var serversHalifax = ServersEFCoreRepository.GetServersByCity("Halifax");
+            if (serversHalifax is not null)
+            {
+                HalifaxOnlineServersStore.SetNumbersServersOnline(serversHalifax.Count(x => x.IsOnline));
             }
         }
     }
