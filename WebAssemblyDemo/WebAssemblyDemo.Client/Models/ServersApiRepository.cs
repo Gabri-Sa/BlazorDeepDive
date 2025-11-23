@@ -13,6 +13,17 @@ namespace WebAssemblyDemo.Client.Models
             this.httpClientFactory = httpClientFactory;
         }
 
+        public async Task<Server?> GetServerByIdAsync(int id)
+        {
+            var httpClient = httpClientFactory.CreateClient(apiName);
+
+            var response = await httpClient.GetAsync($"servers/{id}.json");
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Server>(content);
+        }
+
         public async Task<List<Server>> GetServersAsync()
         {
             var httpClient = httpClientFactory.CreateClient(apiName);
@@ -40,6 +51,23 @@ namespace WebAssemblyDemo.Client.Models
 
             var response = await httpClient.PutAsync($"servers/{server.ServerId}.json", content);
             response.EnsureSuccessStatusCode();
+        }
+
+        public async Task UpdateServerAsync(int serverId, Server server)
+        {
+            if (server.ServerId != serverId) return;
+
+            var httpClient = httpClientFactory.CreateClient(apiName);
+            var content = new StringContent(JsonConvert.SerializeObject(server), Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PatchAsync($"servers/{serverId}.json", content);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task DeleteServerAsync(int serverId)
+        {
+            var httpClient = httpClientFactory.CreateClient(apiName);
+            await httpClient.DeleteAsync($"servers/{serverId}.json");
         }
 
         private async Task<int> GetNextServerIdAsync()
