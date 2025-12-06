@@ -74,11 +74,8 @@
     {
         if (server != null)
         {
-           await ServersApiRepository.UpdateServerAsync(server.ServerId, server);
+            await ServersApiRepository.UpdateServerAsync(server.ServerId, server);
         }
-
         NavigationManager.NavigateTo($"/wasm/servers/");
-
     }
-
 }

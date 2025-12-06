@@ -7,5 +7,6 @@
         Task<Server?> GetServerByIdAsync(int id);
         Task<List<Server>> GetServersAsync();
         Task UpdateServerAsync(int serverId, Server server);
+        
     }
 }
