@@ -1,15 +1,18 @@
-﻿@page "/cityname"
+@page "/servername"
+@using Microsoft.AspNetCore.Authorization
 @using ServerManagement.StateStore
 
+@attribute [Authorize]
 @rendermode InteractiveServer
 
-@inherits ComponentBase
+@inherits BaseComponent
 
 @inject NavigationManager NavigationManager
 @inject ContainerStorage containerStorage
 
-<h3>City Name</h3>
+<h3>Server Name</h3>
 <br />
+
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="alert alert-danger">
@@ -19,13 +22,13 @@
 
 @if (server is not null)
 {
-    <FieldComponent Label="City Name">
-        <Control>
-            <input type="text" @bind-value="server.City" class="form-control"> </input>
-        </Control>
-    </FieldComponent>
-    <br />
-    <button type="button" class="btn btn-primary" @onclick="GoNext">Next</button>
+<FieldComponent Label="Name">
+    <Control>
+        <input type="text" @bind-value="server.Name" class="form-control"> </input>
+    </Control>
+</FieldComponent>
+<br />
+<button type="button" class="btn btn-primary" @onclick="GoNext">Next</button>
 }
 
 @code {
@@ -42,7 +45,7 @@
     {
         if (firstRender)
         {
-            this.server = this.containerStorage.GetServer();
+            server = new Server();
             StateHasChanged();
         }
     }
@@ -51,14 +54,14 @@
     {
         if (server is not null)
         {
-            if (string.IsNullOrWhiteSpace(server.City))
+            if (string.IsNullOrWhiteSpace(server.Name))
             {
-                this.errorMessage = "City name is required.";
+                this.errorMessage = "Server name is required.";
             }
             else
             {
                 containerStorage.SetServer(server);
-                NavigationManager.NavigateTo("/serverstatus");
+                NavigationManager.NavigateTo("/cityname");
             }
         }
     }

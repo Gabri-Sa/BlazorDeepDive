@@ -1,9 +1,11 @@
-﻿@page "/serverstatus"
+@page "/serverstatus"
+@using Microsoft.AspNetCore.Authorization
 @using ServerManagement.StateStore
 
+@attribute [Authorize]
 @rendermode InteractiveServer
 
-@inherits ComponentBase
+@inherits BaseComponent
 
 @inject NavigationManager NavigationManager
 @inject ContainerStorage containerStorage

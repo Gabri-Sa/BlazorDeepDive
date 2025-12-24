@@ -1,0 +1,11 @@
+@page "/Account/AccessDenied"
+
+<PageTitle>Access Denied</PageTitle>
+
+<h1 style="color: red;">Access denied</h1>
+<p style="color: red;">You do not have access to this resource.</p>
+
+@code {
+    [Parameter, SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+}

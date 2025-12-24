@@ -42,17 +42,22 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Manager", policy => policy.RequireClaim("Role", "General Manager"));
+});
+
 var connectionString = builder.Configuration.GetConnectionString("ServerManagement") ?? throw new InvalidOperationException("Connection string 'ServerManagement' not found.");
 builder.Services.AddDbContext<ServerManagementIdentityContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Configure Identity with relaxed requirements for development
-builder.Services.AddIdentityCore<IdentityUser>(options => 
+builder.Services.AddIdentityCore<IdentityUser>(options =>
     {
-        // Disable email confirmation requirement for development
-        options.SignIn.RequireConfirmedAccount = false;
-        
+        // Require email confirmation to show the RegisterConfirmation page and flow
+        options.SignIn.RequireConfirmedAccount = true;
+
         // Relax password requirements for easier testing
         options.Password.RequireDigit = false;
         options.Password.RequireLowercase = false;
