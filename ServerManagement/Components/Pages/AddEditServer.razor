@@ -1,7 +1,12 @@
 ﻿@page "/server/{id:int?}"
+@using Microsoft.AspNetCore.Authorization
+
+@rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
 @inject IServersEFCoreRepository ServersEFCoreRepository
+
+@attribute [Authorize]
 
 @if (Id.HasValue)
 {
