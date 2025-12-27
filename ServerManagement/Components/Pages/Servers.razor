@@ -29,7 +29,7 @@
 <br />
 
 <CascadingValue Name="SelectedCity" Value="@selectedCity">
-        <ServerListComponent @rendermode="InteractiveServer"
+    <ServerListComponent @rendermode="InteractiveServer"
                          CityName="@this.selectedCity"
                          SearchFilter="@searchFilter"></ServerListComponent>
 </CascadingValue>
@@ -48,6 +48,44 @@
     private CityListComponent? cityListComponent;
     private SearchBarComponent? searchBarComponent;
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (RendererInfo.IsInteractive)
+        {
+            // Init state stores
+            var serversToronto = ServersEFCoreRepository.GetServersByCity("Toronto");
+            if (serversToronto is not null)
+            {
+                TorontoOnlineServersStore.SetNumbersServersOnline(serversToronto.Count(x => x.IsOnline));
+            }
+
+            var serversMontreal = ServersEFCoreRepository.GetServersByCity("Montreal");
+            if (serversMontreal is not null)
+            {
+                MontrealOnlineServersStore.SetNumbersServersOnline(serversMontreal.Count(x => x.IsOnline));
+            }
+
+            var serversOttawa = ServersEFCoreRepository.GetServersByCity("Ottawa");
+            if (serversOttawa is not null)
+            {
+                OttawaOnlineServersStore.SetNumbersServersOnline(serversOttawa.Count(x => x.IsOnline));
+            }
+
+            var serversCalgary = ServersEFCoreRepository.GetServersByCity("Calgary");
+            if (serversCalgary is not null)
+            {
+                CalgaryOnlineServersStore.SetNumbersServersOnline(serversCalgary.Count(x => x.IsOnline));
+            }
+
+            var serversHalifax = ServersEFCoreRepository.GetServersByCity("Halifax");
+            if (serversHalifax is not null)
+            {
+                HalifaxOnlineServersStore.SetNumbersServersOnline(serversHalifax.Count(x => x.IsOnline));
+            }
+        }
+    }
     private void HandleSearch()
     {
         //this.servers = ServersEFCoreRepository.SearchServers(serverFilter);
@@ -79,7 +117,7 @@
 
                 StateHasChanged();
             }
-            
+
             // Initialize online server counts for all cities
             var serversToronto = ServersEFCoreRepository.GetServersByCity("Toronto");
             if (serversToronto is not null)
