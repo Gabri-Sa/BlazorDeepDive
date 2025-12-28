@@ -1,7 +1,7 @@
 ﻿@page "/wasm/servers"
 @using WebAssemblyDemo.Client.Models
 
-@rendermode InteractiveWebAssembly
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender:false))
 
 @inject NavigationManager NavigationManager
 @inject IServersRepository ServersApiRepository
@@ -10,45 +10,39 @@
 <br />
 <br />
 
-@if (listServers == null || listServers.Count <= 0)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    City
-                </th>
-                <th>
-                    Status
-                </th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (listServers.Any())
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Status
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (listServers.Any())
+        {
+            foreach (var server in listServers)
             {
-                foreach (var server in listServers)
+                @if (server is not null)
                 {
-                    @if (server is not null)
-                    {
-                        <tr>
-                            <td>@server.Name</td>
-                            <td>@server.City</td>
-                            <td>@(server.IsOnline ? "Online" : "Offline")</td>
-                            <td><a class="btn btn-link" href="/wasm/servers/@server.ServerId">Edit</a></td>
-                            <td><button class="btn btn-link" @onclick="@(async () => { await Delete(server.ServerId); })">Delete</button></td>
-                        </tr>
-                    }
+                    <tr>
+                        <td>@server.Name</td>
+                        <td>@server.City</td>
+                        <td>@(server.IsOnline ? "Online" : "Offline")</td>
+                        <td><a class="btn btn-link" href="/wasm/servers/@server.ServerId">Edit</a></td>
+                        <td><button class="btn btn-link" @onclick="@(async () => { await Delete(server.ServerId); })">Delete</button></td>
+                    </tr>
                 }
             }
+        }
     </tbody>
 </table>
 <br />
@@ -63,7 +57,8 @@ else
     {
         if (firstRender)
         {
-            await Task.Delay(2000); 
+            await Task.Delay(1000);
+
             listServers = await ServersApiRepository.GetServersAsync();
             StateHasChanged();
         }
@@ -73,5 +68,44 @@ else
     {
         await ServersApiRepository.DeleteServerAsync(serverId);
         listServers = await ServersApiRepository.GetServersAsync();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"{this.GetType().Name}: {nameof(OnInitialized)}: {guid}");
+    }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"{this.GetType().Name}: {nameof(SetParametersAsync)}: {guid}");
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"{this.GetType().Name}: {nameof(OnParametersSet)}: {guid}");
+    }
+
+    protected override bool ShouldRender()
+    {
+        var guid = Guid.NewGuid();
+        Console.WriteLine($"{this.GetType().Name}: {nameof(ShouldRender)}: {guid}");
+
+        return base.ShouldRender();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+            base.OnAfterRender(firstRender);
+
+            var guid = Guid.NewGuid();
+            Console.WriteLine($"{this.GetType().Name}: {nameof(OnAfterRender)}: {guid}");
     }
 }
