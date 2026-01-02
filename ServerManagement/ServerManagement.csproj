@@ -26,6 +26,10 @@
     <!-- <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.0.0-rc.1.25458.5" /> -->
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\bootstrap\dist\js\" />
+  </ItemGroup>
+
   <!-- Workaround for .NET 10 tooling issues -->
   <PropertyGroup Condition="'$(MSBuildRuntimeType)' == 'Core'">
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
